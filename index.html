@@ -2,22 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>DESTROY YOUR SPIRIT</title>
 <meta name="description" content="DYS — a hidden gem in Milan's underground. Raw energy, emotion, and connection on the dance floor." />
 <meta name="theme-color" content="#000000" />
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 
-<!-- Open Graph -->
 <meta property="og:title" content="DESTROY YOUR SPIRIT" />
 <meta property="og:description" content="A hidden gem in Milan's underground." />
 <meta property="og:image" content="assets/favicon.png" />
 <meta property="og:type" content="website" />
 
-<!-- Fonts: a distinctive blackletter-adjacent display + a raw mono body -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Major+Mono+Display&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
 
 <style>
   :root{
@@ -25,255 +23,176 @@
     --red-bright:#ff1414;
     --red-dim:#7a0000;
     --black:#000000;
-    --ink:#0a0a0a;
-    --glow: 0 0 12px rgba(212,0,0,.55), 0 0 40px rgba(212,0,0,.25);
+    --glow: 0 0 12px rgba(212,0,0,.5), 0 0 34px rgba(212,0,0,.22);
   }
 
   *{ margin:0; padding:0; box-sizing:border-box; }
 
-  html,body{
+  html{ scroll-behavior:smooth; }
+  body{
     background:var(--black);
     color:var(--red);
     font-family:"Space Mono", monospace;
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
-    cursor:crosshair;
-  }
-
-  body{
     min-height:100vh;
-    position:relative;
   }
 
-  /* film grain + scanline overlay across the whole page */
-  body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:50;
-    background:
-      repeating-linear-gradient(
-        0deg,
-        rgba(0,0,0,0) 0px,
-        rgba(0,0,0,0) 2px,
-        rgba(0,0,0,.25) 3px,
-        rgba(0,0,0,0) 4px
-      );
-    mix-blend-mode:multiply;
-    opacity:.6;
-    animation:scan 8s linear infinite;
+  /* one cheap static scanline texture — no blend-mode, no animation repaint */
+  .scanlines{
+    position:fixed; inset:0; z-index:50; pointer-events:none;
+    background:repeating-linear-gradient(0deg,
+      rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px,
+      rgba(0,0,0,.22) 3px, rgba(0,0,0,0) 4px);
+    opacity:.5;
   }
-  @keyframes scan{ from{ background-position:0 0; } to{ background-position:0 120px; } }
-
-  body::after{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:51;
-    background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.85) 100%);
+  .vignette{
+    position:fixed; inset:0; z-index:51; pointer-events:none;
+    background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.82) 100%);
   }
 
   /* ---------- HERO ---------- */
   .hero{
     position:relative;
     width:100%;
-    height:100vh;
-    height:100svh;
+    min-height:100vh;
+    min-height:100svh;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
+    text-align:center;
+    padding:6vh 6vw 0;
     overflow:hidden;
   }
 
-  #gl{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    z-index:1;
-  }
-
-  .hero-title{
+  /* ---- CSS-only glitch mascot (no WebGL) ---- */
+  .mascot{
     position:relative;
-    z-index:3;
-    text-align:center;
-    margin-top:min(34vh,300px);
-    pointer-events:none;
-    user-select:none;
+    width:min(40vw, 300px);
+    aspect-ratio:700 / 646;
+    margin-bottom:clamp(1.5rem,5vh,3rem);
+    filter:drop-shadow(0 0 22px rgba(212,0,0,.35));
+    will-change:transform;
+  }
+  .mascot img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:contain;
+    /* recolor the stored red to brand red & allow tinting per layer */
+  }
+  .mascot .base{ animation:float 7s ease-in-out infinite; }
+  /* two offset ghost copies = chromatic split, animated only with transform/opacity (GPU cheap) */
+  .mascot .g1{ mix-blend-mode:screen; filter:hue-rotate(-12deg) brightness(1.3); animation:split1 4s steps(2) infinite; opacity:.0; }
+  .mascot .g2{ mix-blend-mode:screen; filter:brightness(1.4); animation:split2 4s steps(2) infinite; opacity:.0; }
+
+  @keyframes float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-8px); } }
+  @keyframes split1{
+    0%,86%,100%{ opacity:0; transform:translate(0,0); }
+    88%{ opacity:.55; transform:translate(-4px,2px); }
+    92%{ opacity:.4; transform:translate(3px,-2px); }
+  }
+  @keyframes split2{
+    0%,80%,100%{ opacity:0; transform:translate(0,0); }
+    90%{ opacity:.45; transform:translate(5px,1px); }
+    94%{ opacity:.3; transform:translate(-3px,-1px); }
+  }
+  /* occasional slice glitch via clip-path, very low frequency */
+  .mascot.glitch .base{ animation:slice .25s steps(3) 1; }
+  @keyframes slice{
+    0%{ clip-path:inset(0 0 0 0); transform:translateX(0); }
+    30%{ clip-path:inset(20% 0 55% 0); transform:translateX(-8px); }
+    60%{ clip-path:inset(60% 0 12% 0); transform:translateX(6px); }
+    100%{ clip-path:inset(0 0 0 0); transform:translateX(0); }
   }
 
-  .hero-title h1{
-    font-family:"Pirata One", system-ui;
+  .hero h1{
+    font-family:"Anton", system-ui, sans-serif;
     font-weight:400;
+    text-transform:uppercase;
     color:var(--red);
-    font-size:clamp(2.4rem, 9vw, 8rem);
-    line-height:.86;
-    letter-spacing:.04em;
+    font-size:clamp(2.8rem, 11vw, 9rem);
+    line-height:.84;
+    letter-spacing:.01em;
     text-shadow:var(--glow);
-    animation:flicker 6s infinite;
   }
-  .hero-title .sub{
-    font-family:"Major Mono Display", monospace;
-    font-size:clamp(.6rem,1.8vw,1rem);
-    letter-spacing:.55em;
+  .hero .sub{
+    font-family:"Space Mono", monospace;
+    font-size:clamp(.6rem,1.6vw,.95rem);
+    letter-spacing:.5em;
     margin-top:1.4rem;
     color:var(--red-bright);
     opacity:.7;
-    padding-left:.55em;
-  }
-
-  @keyframes flicker{
-    0%,19%,21%,23%,25%,54%,56%,100%{ opacity:1; text-shadow:var(--glow); }
-    20%,24%,55%{ opacity:.45; text-shadow:none; }
+    padding-left:.5em;
   }
 
   .scroll-cue{
-    position:absolute;
-    bottom:28px;
-    left:50%;
+    position:absolute; bottom:26px; left:50%;
     transform:translateX(-50%);
-    z-index:3;
-    font-family:"Major Mono Display", monospace;
-    font-size:.65rem;
-    letter-spacing:.4em;
-    color:var(--red);
-    opacity:.6;
+    font-family:"Space Mono", monospace;
+    font-size:.62rem; letter-spacing:.4em;
+    color:var(--red); opacity:.55;
     animation:bob 2.4s ease-in-out infinite;
-    pointer-events:none;
   }
-  @keyframes bob{ 0%,100%{ transform:translateX(-50%) translateY(0);} 50%{ transform:translateX(-50%) translateY(8px);} }
+  @keyframes bob{ 0%,100%{ transform:translateX(-50%);} 50%{ transform:translateX(-50%) translateY(7px);} }
 
   /* ---------- SECTIONS ---------- */
-  main{
-    position:relative;
-    z-index:3;
-    max-width:920px;
-    margin:0 auto;
-    padding:0 7vw;
-  }
-
-  section{
-    padding:14vh 0;
-    border-bottom:1px solid rgba(212,0,0,.14);
-  }
+  main{ position:relative; z-index:3; max-width:920px; margin:0 auto; padding:0 7vw; }
+  section{ padding:13vh 0; border-bottom:1px solid rgba(212,0,0,.13); }
 
   .label{
-    font-family:"Major Mono Display", monospace;
-    font-size:.7rem;
-    letter-spacing:.5em;
-    color:var(--red-bright);
-    margin-bottom:2.4rem;
-    display:flex;
-    align-items:center;
-    gap:1rem;
+    font-family:"Space Mono", monospace; font-weight:700;
+    font-size:.7rem; letter-spacing:.45em; color:var(--red-bright);
+    margin-bottom:2.2rem; display:flex; align-items:center; gap:1rem;
   }
-  .label::before{
-    content:"";
-    width:34px; height:1px;
-    background:var(--red);
-    box-shadow:var(--glow);
-  }
+  .label::before{ content:""; width:32px; height:1px; background:var(--red); box-shadow:var(--glow); }
 
   .xxx-mark{
-    font-family:"Pirata One",system-ui;
-    font-size:clamp(2rem,7vw,4rem);
-    letter-spacing:.2em;
-    color:var(--red);
-    margin-bottom:2rem;
-    text-shadow:var(--glow);
+    font-family:"Anton", system-ui, sans-serif;
+    font-size:clamp(2rem,7vw,3.6rem); letter-spacing:.18em;
+    color:var(--red); margin-bottom:1.6rem; text-shadow:var(--glow);
   }
 
   p.body{
-    font-size:clamp(.95rem,1.5vw,1.1rem);
-    line-height:1.85;
-    color:#e8b3b3;
-    max-width:62ch;
-    margin-bottom:1.6rem;
-    font-weight:400;
+    font-size:clamp(.95rem,1.5vw,1.08rem); line-height:1.85;
+    color:#e8b3b3; max-width:62ch; margin-bottom:1.5rem;
   }
   p.body strong{ color:var(--red-bright); font-weight:700; }
 
   /* ---------- CONTACT ---------- */
-  .contact{
-    text-align:center;
-    padding:18vh 0 14vh;
-    border-bottom:none;
-  }
-  .contact .glyph{
-    font-size:1.4rem;
-    letter-spacing:1.2em;
-    color:var(--red-dim);
-    margin-bottom:3rem;
-    padding-left:1.2em;
-  }
-  .contact h2{
-    font-family:"Pirata One",system-ui;
-    font-weight:400;
-    font-size:clamp(1.8rem,6vw,3.4rem);
-    margin-bottom:2.4rem;
-    text-shadow:var(--glow);
-  }
-  a.mail{
-    display:inline-block;
-    font-family:"Space Mono",monospace;
-    font-size:clamp(1rem,2.5vw,1.5rem);
-    color:var(--red);
-    text-decoration:none;
-    padding:.7em 1.2em;
-    border:1px solid var(--red-dim);
-    letter-spacing:.08em;
-    position:relative;
-    transition:.25s;
-    background:rgba(212,0,0,.03);
-  }
-  a.mail:hover{
-    color:#000;
-    background:var(--red);
-    box-shadow:var(--glow);
-    letter-spacing:.14em;
-  }
-  a.mail::before{ content:"["; margin-right:.5em; opacity:.5;}
-  a.mail::after{ content:"]"; margin-left:.5em; opacity:.5;}
+  .contact{ text-align:center; padding:17vh 0 13vh; border-bottom:none; }
+  .contact .glyph{ font-family:"Anton",sans-serif; font-size:1.4rem; letter-spacing:.9em; color:var(--red-dim); margin-bottom:2.6rem; padding-left:.9em; }
+  .contact h2{ font-family:"Anton", sans-serif; font-weight:400; text-transform:uppercase; font-size:clamp(2rem,7vw,3.8rem); margin-bottom:2.2rem; text-shadow:var(--glow); }
 
-  .socials{
-    margin-top:3.4rem;
-    display:flex;
-    gap:2.4rem;
-    justify-content:center;
-    align-items:center;
+  a.mail{
+    display:inline-block; font-family:"Space Mono",monospace;
+    font-size:clamp(1rem,2.4vw,1.4rem); color:var(--red);
+    text-decoration:none; padding:.7em 1.2em; border:1px solid var(--red-dim);
+    letter-spacing:.06em; background:rgba(212,0,0,.03); transition:.2s;
   }
+  a.mail:hover{ color:#000; background:var(--red); box-shadow:var(--glow); }
+  a.mail::before{ content:"["; margin-right:.5em; opacity:.5; }
+  a.mail::after{ content:"]"; margin-left:.5em; opacity:.5; }
+
+  .socials{ margin-top:3rem; }
   .socials a{
-    font-family:"Major Mono Display",monospace;
-    font-size:.75rem;
-    letter-spacing:.3em;
-    color:var(--red);
-    text-decoration:none;
-    opacity:.7;
-    transition:.2s;
+    font-family:"Space Mono",monospace; font-size:.75rem; letter-spacing:.25em;
+    color:var(--red); text-decoration:none; opacity:.7; transition:.2s;
   }
   .socials a:hover{ opacity:1; text-shadow:var(--glow); }
 
   footer{
-    text-align:center;
-    padding:3rem 0 4rem;
-    font-family:"Major Mono Display",monospace;
-    font-size:.6rem;
-    letter-spacing:.4em;
-    color:var(--red-dim);
-    position:relative;
-    z-index:3;
+    text-align:center; padding:3rem 0 4rem;
+    font-family:"Space Mono",monospace; font-size:.6rem;
+    letter-spacing:.35em; color:var(--red-dim); position:relative; z-index:3;
   }
 
-  /* glitch reveal for scroll-in elements */
-  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal{ opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s ease; }
   .reveal.in{ opacity:1; transform:none; }
 
   @media (max-width:600px){
-    body::after{ background:radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.9) 100%); }
-    .hero-title{ margin-top:min(30vh,220px); }
+    .mascot{ width:55vw; }
+    .vignette{ background:radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.9) 100%); }
   }
   @media (prefers-reduced-motion: reduce){
     *{ animation:none !important; transition:none !important; }
@@ -281,18 +200,22 @@
 </style>
 </head>
 <body>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
 
-  <!-- ============ HERO ============ -->
   <header class="hero">
-    <canvas id="gl"></canvas>
-    <div class="hero-title">
+    <div class="mascot" id="mascot">
+      <img class="base" src="assets/mascot.png" alt="DYS mascot" fetchpriority="high" />
+      <img class="g1" src="assets/mascot.png" alt="" aria-hidden="true" />
+      <img class="g2" src="assets/mascot.png" alt="" aria-hidden="true" />
     </div>
-    <div class="scroll-cue">SCROLL &darr;</div>
+    <h1>DESTROY<br>YOUR SPIRIT</h1>
+    <div class="sub">MILANO &bull; UNDERGROUND</div>
+    <a class="scroll-cue" href="#bio">SCROLL &darr;</a>
   </header>
 
-  <!-- ============ CONTENT ============ -->
   <main>
-    <section class="reveal">
+    <section id="bio" class="reveal">
       <div class="label">COLLECTIVE BIO</div>
       <p class="body">
         Co-founded by <strong>Mourir Beau</strong> and <strong>Scarface</strong>, DYS is a hidden gem
@@ -336,7 +259,7 @@
 
     <section class="contact reveal">
       <div class="glyph">&times;&times;&times;</div>
-      <h2>JOIN THE CULT</h2>
+      <h2>Join The Cult</h2>
       <a class="mail" href="mailto:hello@destroyyourspir.it">hello@destroyyourspir.it</a>
       <div class="socials">
         <a href="https://instagram.com/Destroyyourspirit" target="_blank" rel="noopener">INSTAGRAM &rarr; @DESTROYYOURSPIRIT</a>
@@ -344,204 +267,34 @@
     </section>
   </main>
 
-  <footer>
-    &copy; DESTROY YOUR SPIRIT &mdash; MILANO
-  </footer>
+  <footer>&copy; DESTROY YOUR SPIRIT &mdash; MILANO</footer>
 
-  <!-- Three.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
   (function(){
-    const canvas = document.getElementById('gl');
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
-
-    // ---- texture (the mascot) ----
-    const loader = new THREE.TextureLoader();
-    loader.crossOrigin = 'anonymous';
-    const tex = loader.load('assets/mascot.png', onTexReady);
-    tex.minFilter = THREE.LinearFilter;
-    tex.magFilter = THREE.LinearFilter;
-
-    let imgAspect = 1392/1284; // fallback from extracted asset
-    function onTexReady(t){
-      if(t.image && t.image.width){ imgAspect = t.image.width / t.image.height; }
-      resize();
-    }
-
-    const uniforms = {
-      uTex:      { value: tex },
-      uTime:     { value: 0 },
-      uMouse:    { value: new THREE.Vector2(0.5,0.5) },
-      uHover:    { value: 0 },
-      uGlitch:   { value: 0 },     // spikes randomly + on interaction
-      uScroll:   { value: 0 },
-      uPlane:    { value: new THREE.Vector2(1,1) }, // plane size in clip space
-      uImgAspect:{ value: imgAspect }
-    };
-
-    const vert = `
-      varying vec2 vUv;
-      void main(){
-        vUv = uv;
-        gl_Position = vec4(position.xy, 0.0, 1.0);
-      }
-    `;
-
-    // fragment: red-channel mascot, chromatic split, block glitch, scanlines, breathing glow
-    const frag = `
-      precision highp float;
-      varying vec2 vUv;
-      uniform sampler2D uTex;
-      uniform float uTime, uHover, uGlitch, uScroll, uImgAspect;
-      uniform vec2 uMouse, uPlane;
-
-      float hash(float n){ return fract(sin(n)*43758.5453123); }
-      float hash2(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }
-
-      // map full-screen uv -> centered, aspect-correct uv for the mascot plane
-      vec2 fitUv(vec2 uv){
-        vec2 c = uv - 0.5;
-        float screenAspect = uPlane.x / uPlane.y;
-        // scale so mascot occupies ~ upper-center, contained
-        float scale = 0.62;
-        c.x *= screenAspect / uImgAspect;
-        c /= scale;
-        // nudge upward so title sits over lower face
-        c.y += 0.18;
-        return c + 0.5;
-      }
-
-      void main(){
-        vec2 uv = fitUv(vUv);
-
-        float t = uTime;
-        float glitch = uGlitch;
-
-        // ---- horizontal block displacement ----
-        float blockY = floor(uv.y * 18.0);
-        float lineNoise = hash(blockY + floor(t*12.0));
-        float shift = (lineNoise - 0.5);
-        float blockActive = step(0.82 - glitch*0.5, lineNoise);
-        uv.x += shift * blockActive * (0.04 + glitch*0.12);
-
-        // ---- mouse ripple / repel ----
-        vec2 m = uMouse;
-        float d = distance(vUv, m);
-        float ripple = sin(d*30.0 - t*4.0) * 0.012 * smoothstep(0.5,0.0,d) * (0.4 + uHover);
-        uv += ripple;
-
-        // ---- chromatic aberration amount ----
-        float ab = 0.004 + glitch*0.02 + uHover*0.006;
-        ab += 0.003 * sin(t*1.3);
-
-        // sample alpha-aware: use red channel of texture as the "ink"
-        float r = texture2D(uTex, uv + vec2( ab, 0.0)).r * texture2D(uTex, uv+vec2(ab,0.0)).a;
-        float g = texture2D(uTex, uv + vec2(0.0, ab*0.4)).r * texture2D(uTex, uv).a;
-        float b = texture2D(uTex, uv - vec2( ab, 0.0)).r * texture2D(uTex, uv-vec2(ab,0.0)).a;
-        float a = texture2D(uTex, uv).a;
-
-        // The mascot art is red on transparent; treat luminance of red as mask
-        float ink = max(r, max(g,b));
-
-        // recolor to deep red with bright edges; keep chromatic ghosting
-        vec3 col = vec3(0.0);
-        col.r = ink * 0.95 + r*0.25;
-        col.g = b*0.06 + glitch*g*0.15;   // tiny cyan/green ghost only during glitch
-        col.b = b*0.10 + glitch*b*0.2;
-
-        // breathing brightness
-        float breathe = 0.85 + 0.15*sin(t*1.6);
-        col *= breathe;
-
-        // hover heat
-        col += vec3(0.4,0.0,0.0) * uHover * smoothstep(0.45,0.0,d) * a;
-
-        // scanlines
-        float sl = 0.9 + 0.1*sin(vUv.y*900.0);
-        col *= sl;
-
-        // grain
-        float grain = (hash2(vUv*vec2(800.0,600.0)+t)*2.0-1.0)*0.06;
-        col += grain * ink;
-
-        // occasional full-frame RGB tear flash
-        float flash = step(0.995, hash(floor(t*8.0)));
-        col.r += flash*0.15*ink;
-
-        float alpha = clamp(ink, 0.0, 1.0);
-        // soft outer glow
-        alpha = max(alpha, a*0.0);
-
-        gl_FragColor = vec4(col, alpha);
-      }
-    `;
-
-    const geo = new THREE.PlaneGeometry(2,2);
-    const mat = new THREE.ShaderMaterial({
-      uniforms, vertexShader:vert, fragmentShader:frag,
-      transparent:true, depthTest:false, depthWrite:false
-    });
-    const mesh = new THREE.Mesh(geo, mat);
-    scene.add(mesh);
-
-    // ---- interaction ----
-    let targetHover = 0;
-    function setMouse(x,y){
-      uniforms.uMouse.value.set(x, 1.0 - y);
-      targetHover = 1;
-      uniforms.uGlitch.value = Math.min(1, uniforms.uGlitch.value + 0.25);
-    }
-    window.addEventListener('pointermove', e=>{
-      const rect = canvas.getBoundingClientRect();
-      setMouse((e.clientX-rect.left)/rect.width, (e.clientY-rect.top)/rect.height);
-    });
-    window.addEventListener('pointerdown', ()=>{ uniforms.uGlitch.value = 1.0; });
-    window.addEventListener('pointerleave', ()=>{ targetHover = 0; });
-
-    window.addEventListener('scroll', ()=>{
-      const s = window.scrollY / (document.body.scrollHeight - window.innerHeight + 1);
-      uniforms.uScroll.value = s;
-      uniforms.uGlitch.value = Math.min(1, uniforms.uGlitch.value + 0.04);
-    }, {passive:true});
-
-    // ---- resize ----
-    function resize(){
-      const w = canvas.clientWidth || window.innerWidth;
-      const h = canvas.clientHeight || window.innerHeight;
-      renderer.setSize(w, h, false);
-      uniforms.uPlane.value.set(w, h);
-      uniforms.uImgAspect.value = imgAspect;
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    // ---- loop ----
-    const start = performance.now();
-    function tick(now){
-      const t = (now - start)/1000;
-      uniforms.uTime.value = t;
-      // hover ease
-      uniforms.uHover.value += (targetHover - uniforms.uHover.value)*0.08;
-      // glitch decays
-      uniforms.uGlitch.value *= 0.92;
-      // random spontaneous glitch bursts
-      if(!reduce && Math.random() < 0.012){ uniforms.uGlitch.value = Math.min(1, uniforms.uGlitch.value + 0.6); }
-      renderer.render(scene, camera);
-      requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-
-    // ---- scroll reveal ----
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('in'); });
+    // scroll-reveal (cheap, runs once per element)
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
     }, { threshold:0.15 });
-    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+    if(reduce) return;
+
+    // occasional slice-glitch on the mascot — timer only, no per-frame loop
+    var m = document.getElementById('mascot');
+    function burst(){
+      m.classList.add('glitch');
+      setTimeout(function(){ m.classList.remove('glitch'); }, 260);
+      setTimeout(burst, 2600 + Math.random()*4200);
+    }
+    setTimeout(burst, 2000);
+
+    // glitch on hover/tap too
+    m.addEventListener('pointerenter', function(){
+      m.classList.add('glitch');
+      setTimeout(function(){ m.classList.remove('glitch'); }, 260);
+    });
   })();
   </script>
 </body>
