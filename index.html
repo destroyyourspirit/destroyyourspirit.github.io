@@ -81,10 +81,18 @@
     object-fit:contain;
     /* recolor the stored red to brand red & allow tinting per layer */
   }
-  .mascot .base{ animation:float 7s ease-in-out infinite; }
+  /* whole mascot bobs as one unit so layers stay locked together */
+  .mascot{ animation:float 7s ease-in-out infinite; }
   /* two offset ghost copies = chromatic split, animated only with transform/opacity (GPU cheap) */
   .mascot .g1{ mix-blend-mode:screen; filter:hue-rotate(-12deg) brightness(1.3); animation:split1 4s steps(2) infinite; opacity:.0; }
   .mascot .g2{ mix-blend-mode:screen; filter:brightness(1.4); animation:split2 4s steps(2) infinite; opacity:.0; }
+
+  /* pupils sit above the face; JS nudges them toward the cursor (desktop only) */
+  .mascot .pupils{
+    transform:translate(0,0);
+    transition:transform .18s ease-out;
+    will-change:transform;
+  }
 
   @keyframes float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-8px); } }
   @keyframes split1{
@@ -205,10 +213,13 @@
 
   <header class="hero">
     <div class="mascot" id="mascot">
-      <img class="base" src="assets/mascot.png" alt="DYS mascot" fetchpriority="high" />
-      <img class="g1" src="assets/mascot.png" alt="" aria-hidden="true" />
-      <img class="g2" src="assets/mascot.png" alt="" aria-hidden="true" />
+      <img class="g1" src="assets/face.png" alt="" aria-hidden="true" />
+      <img class="g2" src="assets/face.png" alt="" aria-hidden="true" />
+      <img class="base" src="assets/face.png" alt="DYS mascot" fetchpriority="high" />
+      <img class="pupils" id="pupils" src="assets/pupils.png" alt="" aria-hidden="true" />
     </div>
+    <h1>DESTROY<br>YOUR SPIRIT</h1>
+    <div class="sub">MILANO &bull; UNDERGROUND</div>
     <a class="scroll-cue" href="#bio">SCROLL &darr;</a>
   </header>
 
@@ -293,6 +304,36 @@
       m.classList.add('glitch');
       setTimeout(function(){ m.classList.remove('glitch'); }, 260);
     });
+
+    // ---- desktop-only eye tracking ----
+    // Skip on touch / coarse pointers and small screens (perf + pointless on mobile).
+    var fine = matchMedia('(pointer:fine)').matches && matchMedia('(min-width:700px)').matches;
+    var pupils = document.getElementById('pupils');
+    if(fine && pupils){
+      var MAX = 9;               // max px the pupils travel
+      var tx = 0, ty = 0, queued = false;
+      function apply(){
+        queued = false;
+        pupils.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px)';
+      }
+      window.addEventListener('pointermove', function(e){
+        var r = m.getBoundingClientRect();
+        var cx = r.left + r.width/2;
+        var cy = r.top + r.height/2;
+        var dx = e.clientX - cx;
+        var dy = e.clientY - cy;
+        var len = Math.hypot(dx, dy) || 1;
+        // normalize direction, scale by how close (closer = less travel feels natural)
+        var reach = Math.min(1, len / (r.width));   // 0..1 ramp
+        tx = (dx/len) * MAX * reach;
+        ty = (dy/len) * MAX * reach;
+        if(!queued){ queued = true; requestAnimationFrame(apply); }
+      }, { passive:true });
+      // recenter when the cursor leaves the window
+      window.addEventListener('pointerout', function(e){
+        if(!e.relatedTarget){ tx = ty = 0; if(!queued){ queued = true; requestAnimationFrame(apply); } }
+      });
+    }
   })();
   </script>
 </body>
