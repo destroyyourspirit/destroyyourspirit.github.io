@@ -13,7 +13,7 @@
 <meta name="theme-color" content="#000000" />
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="apple-touch-icon" href="assets/favicon.png" />
-<link rel="preload" as="image" href="assets/face.png" fetchpriority="high" />
+<link rel="preload" as="image" type="image/webp" href="assets/face.webp" fetchpriority="high" />
 
 <meta name="geo.region" content="IT-MI" />
 <meta name="geo.placename" content="Milano" />
@@ -123,6 +123,8 @@
     filter:drop-shadow(0 0 22px rgba(212,0,0,.35));
     will-change:transform;
   }
+  /* picture wrappers must not affect the absolute layering */
+  .mascot picture{ display:contents; }
   .mascot img{
     position:absolute; inset:0;
     width:100%; height:100%;
@@ -301,10 +303,10 @@
 
   <header class="hero">
     <div class="mascot" id="mascot">
-      <img class="g1" src="assets/face.png" alt="" aria-hidden="true" />
-      <img class="g2" src="assets/face.png" alt="" aria-hidden="true" />
-      <img class="base" src="assets/face.png" alt="DYS mascot" fetchpriority="high" />
-      <img class="pupils" id="pupils" src="assets/pupils.png" alt="" aria-hidden="true" />
+      <picture><source srcset="assets/face.webp" type="image/webp" /><img class="g1" src="assets/face.png" alt="" aria-hidden="true" /></picture>
+      <picture><source srcset="assets/face.webp" type="image/webp" /><img class="g2" src="assets/face.png" alt="" aria-hidden="true" /></picture>
+      <picture><source srcset="assets/face.webp" type="image/webp" /><img class="base" src="assets/face.png" alt="DYS mascot" fetchpriority="high" /></picture>
+      <picture><source srcset="assets/pupils.webp" type="image/webp" /><img class="pupils" id="pupils" src="assets/pupils.png" alt="" aria-hidden="true" /></picture>
     </div>
     <a class="scroll-cue" href="#bio">SCROLL &darr;</a>
   </header>

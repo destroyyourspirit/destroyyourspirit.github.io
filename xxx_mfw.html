@@ -157,6 +157,7 @@
     box-shadow:var(--glow);
     filter:drop-shadow(0 0 26px rgba(212,0,0,.25));
   }
+  .poster-wrap picture{ display:contents; }
   .poster-wrap img{ display:block; width:100%; height:100%; object-fit:cover; }
 
   /* starburst "special guests" seal — inline SVG, static */
@@ -322,7 +323,7 @@
       <div class="kicker">Now coming to a temple near you</div>
 
       <div class="poster-wrap">
-        <img src="assets/event-xxx.jpg" alt="XXX — Milan Fashion Week Edition poster" fetchpriority="high" />
+        <picture><source srcset="assets/event-xxx.webp" type="image/webp" /><img src="assets/event-xxx.jpg" alt="XXX — Milan Fashion Week Edition poster" fetchpriority="high" /></picture>
         <div class="badge" aria-hidden="true">
           <svg viewBox="0 0 100 100">
             <polygon class="seal" points="50,0 59.58,14.26 75,6.70 76.16,23.84 93.30,25 85.74,40.42 100,50 85.74,59.58 93.30,75 76.16,76.16 75,93.30 59.58,85.74 50,100 40.42,85.74 25,93.30 23.84,76.16 6.70,75 14.26,59.58 0,50 14.26,40.42 6.70,25 23.84,23.84 25,6.70 40.42,14.26" />
