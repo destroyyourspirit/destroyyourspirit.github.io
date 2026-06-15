@@ -142,13 +142,12 @@
 
   /* ---------- META GRID ---------- */
   .meta{
-    display:grid; grid-template-columns:repeat(4,1fr);
+    display:grid; grid-template-columns:repeat(3,1fr);
     gap:1px; background:rgba(212,0,0,.18);
     border:1px solid rgba(212,0,0,.18);
     margin:clamp(2rem,6vh,3.5rem) 0;
   }
-  @media (max-width:760px){ .meta{ grid-template-columns:repeat(2,1fr); } }
-  @media (max-width:440px){ .meta{ grid-template-columns:1fr; } }
+  @media (max-width:600px){ .meta{ grid-template-columns:1fr; } }
   .meta .cell{ background:var(--black); padding:1.3rem 1.2rem; }
   .meta .k{
     font-family:"Space Mono",monospace; font-weight:700;
@@ -295,25 +294,7 @@
         <div class="k">Venue</div>
         <div class="v">Vacuum<small>Corso di Porta Ticinese 32, 20123 Milano · <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=VACUUM%20Corso%20di%20Porta%20Ticinese%2032%20Milano" target="_blank" rel="noopener">Map &rarr;</a></small></div>
       </div>
-      <div class="cell">
-        <div class="k">Tickets</div>
-        <div class="v">On DICE<small>18+ only</small></div>
-      </div>
     </div>
-
-    <section class="block reveal">
-      <div class="label">The Night</div>
-      <p class="body">
-        The party you can't miss during <strong>Milan Fashion Week</strong>. On June 19th DYS returns to
-        Milan with international guests <strong>Doki Doki Exorcista</strong> (Berlin) and
-        <strong>Madame3Swords</strong> (London) joining residents <strong>figo</strong>,
-        <strong>mourirbeau</strong> and <strong>scarface</strong> for a special MFW edition of XXX.
-        Expect techno, electro, breaks and international flare.
-      </p>
-      <p class="body">
-        A temple where nobody needs to be somebody. Come disappear with us.
-      </p>
-    </section>
 
     <section class="block reveal">
       <div class="label">Lineup</div>
@@ -348,9 +329,22 @@
       </div>
     </section>
 
+    <section class="block reveal">
+      <div class="label">The Night</div>
+      <p class="body">
+        The party you can't miss during <strong>Milan Fashion Week</strong>. On June 19th DYS returns to
+        Milan with international guests <strong>Doki Doki Exorcista</strong> (Berlin) and
+        <strong>Madame3Swords</strong> (London) joining residents <strong>figo</strong>,
+        <strong>mourirbeau</strong> and <strong>scarface</strong> for a special MFW edition of XXX.
+        Expect techno, electro, breaks and international flare.
+      </p>
+      <p class="body">
+        A temple where nobody needs to be somebody. Come disappear with us.
+      </p>
+    </section>
+
     <div class="cta reveal">
       <a class="tix" href="https://dice.fm/event/bb7qeg-xxx-milan-fashion-week-edition-19th-jun-vacuum-milano-tickets" target="_blank" rel="noopener">Tickets on DICE</a>
-      <div class="note">VACUUM, Milano · 18+ · presented by Gidal Group SRL · via DICE</div>
     </div>
   </main>
 
