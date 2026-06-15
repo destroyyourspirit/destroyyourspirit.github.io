@@ -101,11 +101,12 @@
   .poster-wrap img{ display:block; width:100%; height:100%; object-fit:cover; }
 
   /* starburst "special guests" seal — inline SVG, static */
+  /* sits where the printed starburst used to be on the poster */
   .badge{
-    position:absolute; top:-26px; right:-26px;
-    width:clamp(96px,22vw,130px); height:clamp(96px,22vw,130px);
+    position:absolute; left:14%; top:27%;
+    width:20%; height:20%;
     animation:spin 22s linear infinite;
-    filter:drop-shadow(0 0 8px rgba(0,0,0,.6));
+    filter:drop-shadow(0 0 6px rgba(0,0,0,.7));
   }
   .badge svg{ width:100%; height:100%; display:block; }
   .badge .seal{ fill:var(--red); }
@@ -241,7 +242,6 @@
   .reveal.in{ opacity:1; transform:none; }
 
   @media (max-width:600px){
-    .badge{ top:-16px; right:-12px; }
     .vignette{ background:radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.9) 100%); }
   }
   @media (prefers-reduced-motion: reduce){
@@ -266,7 +266,7 @@
         <img src="assets/event-xxx.jpg" alt="XXX — Milan Fashion Week Edition poster" fetchpriority="high" />
         <div class="badge" aria-hidden="true">
           <svg viewBox="0 0 100 100">
-            <polygon class="seal" points="50,0 62.25,20.44 85.36,14.64 79.56,37.75 100,50 79.56,62.25 85.36,85.36 62.25,79.56 50,100 37.75,79.56 14.64,85.36 20.44,62.25 0,50 20.44,37.75 14.64,14.64 37.75,20.44" />
+            <polygon class="seal" points="50,0 59.58,14.26 75,6.70 76.16,23.84 93.30,25 85.74,40.42 100,50 85.74,59.58 93.30,75 76.16,76.16 75,93.30 59.58,85.74 50,100 40.42,85.74 25,93.30 23.84,76.16 6.70,75 14.26,59.58 0,50 14.26,40.42 6.70,25 23.84,23.84 25,6.70 40.42,14.26" />
             <text x="50" y="44" font-size="15">SPECIAL</text>
             <text x="50" y="62" font-size="15">GUESTS</text>
           </svg>
