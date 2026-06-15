@@ -253,7 +253,7 @@
   .artist{ margin-bottom:2.8rem; }
   .artist:last-child{ margin-bottom:0; }
   .artist .name{
-    display:inline-block;
+    display:inline-block; text-decoration:none;
     font-family:"Anton",sans-serif; text-transform:uppercase;
     font-size:clamp(1.6rem,6vw,2.8rem); line-height:1; letter-spacing:.02em;
     color:#000; background:var(--red); padding:.12em .35em;
@@ -273,12 +273,12 @@
   .residents{
     display:flex; flex-wrap:wrap; gap:.6rem .8rem; margin-top:1rem;
   }
-  .residents span{
+  .residents a{
     font-family:"Anton",sans-serif; text-transform:uppercase;
     font-size:clamp(1.1rem,4vw,1.6rem); letter-spacing:.03em;
-    color:var(--red-bright); text-shadow:var(--glow);
+    color:var(--red-bright); text-shadow:var(--glow); text-decoration:none;
   }
-  .residents span:not(:last-child)::after{ content:" /"; color:var(--red); }
+  .residents a:not(:last-child)::after{ content:" /"; color:var(--red); }
 
   /* ---------- CTA ---------- */
   .cta{ text-align:center; padding:clamp(2.5rem,7vh,4.5rem) 0; }
@@ -361,7 +361,7 @@
       <div class="label">Lineup</div>
 
       <div class="artist">
-        <span class="name">Madame3Swords</span><span class="origin">London</span>
+        <a class="name" href="https://www.instagram.com/madame3swords" target="_blank" rel="noopener">Madame3Swords</a><span class="origin">London</span>
         <div class="role">DJ · founder of Hardback &amp; Four of Wands radio</div>
         <p class="body">
           Known for a mix of industrial beats and sonic blasts, Madame3Swords runs the
@@ -372,7 +372,7 @@
       </div>
 
       <div class="artist">
-        <span class="name">Doki Doki Exorcista</span><span class="origin">Berlin</span>
+        <a class="name" href="https://www.instagram.com/dokidoki_exorcista" target="_blank" rel="noopener">Doki Doki Exorcista</a><span class="origin">Berlin</span>
         <div class="role">Hard Electronic Club · latinoamerican flavor</div>
         <p class="body">
           Born in Germany but raised in Bolivia, Doki Doki Exorcista delivers hard-hitting, face-melting
@@ -385,7 +385,7 @@
       <div class="artist">
         <div class="role" style="margin-top:0">DYS residents</div>
         <div class="residents">
-          <span>figo</span><span>mourirbeau</span><span>scarface</span>
+          <a href="https://www.instagram.com/figo" target="_blank" rel="noopener">figo</a><a href="https://www.instagram.com/mourirbeau" target="_blank" rel="noopener">mourirbeau</a><a href="https://www.instagram.com/destroyscarface" target="_blank" rel="noopener">scarface</a>
         </div>
       </div>
     </section>
