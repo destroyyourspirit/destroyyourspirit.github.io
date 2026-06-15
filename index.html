@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- CSP: script-src is strict (all JS is external). frame-ancestors / HSTS / COOP
+     are delivered as HTTP headers at the Cloudflare edge — see CLAUDE.md. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self'; font-src https://fonts.gstatic.com; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script'; upgrade-insecure-requests" />
 <title>Destroy Your Spirit — Underground Electronic Music &amp; Raves in Milan</title>
 <meta name="description" content="Destroy Your Spirit (DYS) is an underground electronic music and rave collective in Milan — techno, electro and breaks from Mourir Beau, Scarface and figo. Events, lineups and tickets." />
 <link rel="canonical" href="https://destroyyourspir.it/" />
@@ -57,7 +61,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" media="print" onload="this.media='all'" />
+<link rel="stylesheet" id="fontcss" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" media="print" />
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" /></noscript>
 
 <style>
@@ -377,63 +381,6 @@
 
   <footer>&copy; DESTROY YOUR SPIRIT &mdash; MILANO</footer>
 
-  <script>
-  (function(){
-    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // scroll-reveal (cheap, runs once per element)
-    var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold:0.15 });
-    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
-
-    if(reduce) return;
-
-    // occasional slice-glitch on the mascot — timer only, no per-frame loop
-    var m = document.getElementById('mascot');
-    function burst(){
-      m.classList.add('glitch');
-      setTimeout(function(){ m.classList.remove('glitch'); }, 260);
-      setTimeout(burst, 2600 + Math.random()*4200);
-    }
-    setTimeout(burst, 2000);
-
-    // glitch on hover/tap too
-    m.addEventListener('pointerenter', function(){
-      m.classList.add('glitch');
-      setTimeout(function(){ m.classList.remove('glitch'); }, 260);
-    });
-
-    // ---- desktop-only eye tracking ----
-    // Skip on touch / coarse pointers and small screens (perf + pointless on mobile).
-    var fine = matchMedia('(pointer:fine)').matches && matchMedia('(min-width:700px)').matches;
-    var pupils = document.getElementById('pupils');
-    if(fine && pupils){
-      var MAX = 9;               // max px the pupils travel
-      var tx = 0, ty = 0, queued = false;
-      function apply(){
-        queued = false;
-        pupils.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px)';
-      }
-      window.addEventListener('pointermove', function(e){
-        var r = m.getBoundingClientRect();
-        var cx = r.left + r.width/2;
-        var cy = r.top + r.height/2;
-        var dx = e.clientX - cx;
-        var dy = e.clientY - cy;
-        var len = Math.hypot(dx, dy) || 1;
-        // normalize direction, scale by how close (closer = less travel feels natural)
-        var reach = Math.min(1, len / (r.width));   // 0..1 ramp
-        tx = (dx/len) * MAX * reach;
-        ty = (dy/len) * MAX * reach;
-        if(!queued){ queued = true; requestAnimationFrame(apply); }
-      }, { passive:true });
-      // recenter when the cursor leaves the window
-      window.addEventListener('pointerout', function(e){
-        if(!e.relatedTarget){ tx = ty = 0; if(!queued){ queued = true; requestAnimationFrame(apply); } }
-      });
-    }
-  })();
-  </script>
+  <script src="assets/app.js" defer></script>
 </body>
 </html>
