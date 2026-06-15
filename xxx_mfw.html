@@ -81,6 +81,7 @@
     --red:#d40000;
     --red-bright:#ff1414;
     --red-dim:#7a0000;
+    --rose:#c98a8a;        /* readable muted tone for small secondary text (AA on black) */
     --black:#000000;
     --glow: 0 0 12px rgba(212,0,0,.5), 0 0 34px rgba(212,0,0,.22);
   }
@@ -120,14 +121,14 @@
   .topbar .home{
     font-family:"Space Mono",monospace; font-weight:700;
     font-size:.62rem; letter-spacing:.32em; text-transform:uppercase;
-    color:var(--red); text-decoration:none; opacity:.8; transition:.2s;
+    color:var(--red-bright); text-decoration:none; transition:.2s;
   }
   .topbar .home:hover{ opacity:1; text-shadow:var(--glow); }
   .topbar .home::before{ content:"\2190  "; }
   .topbar .tix-mini{
     font-family:"Space Mono",monospace; font-weight:700;
     font-size:.62rem; letter-spacing:.28em; text-transform:uppercase;
-    color:#000; background:var(--red); text-decoration:none;
+    color:#000; background:var(--red-bright); text-decoration:none;
     padding:.55em .9em; transition:.2s; white-space:nowrap;
   }
   .topbar .tix-mini:hover{ background:var(--red-bright); box-shadow:var(--glow); }
@@ -145,7 +146,7 @@
     font-family:"Space Mono",monospace; font-weight:700;
     font-size:clamp(.58rem,1.5vw,.72rem); letter-spacing:.42em;
     text-transform:uppercase; color:var(--red-bright);
-    opacity:.85; margin-bottom:1.8rem;
+    margin-bottom:1.8rem;
   }
 
   .poster-wrap{
@@ -197,7 +198,7 @@
   .genres span{
     font-family:"Space Mono",monospace; font-weight:700;
     font-size:.62rem; letter-spacing:.26em; text-transform:uppercase;
-    color:var(--red); border:1px solid var(--red-dim);
+    color:var(--red-bright); border:1px solid var(--red-dim);
     padding:.4em .8em; background:rgba(212,0,0,.04);
   }
 
@@ -213,7 +214,7 @@
   .meta .k{
     font-family:"Space Mono",monospace; font-weight:700;
     font-size:.58rem; letter-spacing:.34em; text-transform:uppercase;
-    color:var(--red-bright); opacity:.8; margin-bottom:.6rem;
+    color:var(--red-bright); margin-bottom:.6rem;
   }
   .meta .v{
     font-family:"Anton",sans-serif; text-transform:uppercase;
@@ -225,7 +226,7 @@
     font-size:.62rem; letter-spacing:.08em; color:#c98a8a;
     text-transform:none; margin-top:.45rem; line-height:1.5;
   }
-  .meta a.maplink{ color:var(--red); text-decoration:none; border-bottom:1px solid var(--red-dim); }
+  .meta a.maplink{ color:var(--red-bright); text-decoration:none; border-bottom:1px solid var(--red-dim); }
   .meta a.maplink:hover{ color:var(--red-bright); }
 
   /* ---------- SECTIONS ---------- */
@@ -262,7 +263,7 @@
   }
   .artist .role{
     font-family:"Space Mono",monospace; font-size:.7rem; letter-spacing:.12em;
-    color:var(--red); opacity:.7; margin:.9rem 0 .6rem;
+    color:var(--rose); margin:.9rem 0 .6rem;
   }
   .artist p.body{ margin-top:.6rem; }
   .residents{
@@ -271,9 +272,9 @@
   .residents span{
     font-family:"Anton",sans-serif; text-transform:uppercase;
     font-size:clamp(1.1rem,4vw,1.6rem); letter-spacing:.03em;
-    color:var(--red); text-shadow:var(--glow);
+    color:var(--red-bright); text-shadow:var(--glow);
   }
-  .residents span:not(:last-child)::after{ content:" /"; color:var(--red-dim); }
+  .residents span:not(:last-child)::after{ content:" /"; color:var(--red); }
 
   /* ---------- CTA ---------- */
   .cta{ text-align:center; padding:clamp(2.5rem,7vh,4.5rem) 0; }
@@ -281,22 +282,18 @@
     display:inline-block; font-family:"Anton",sans-serif;
     text-transform:uppercase; letter-spacing:.06em;
     font-size:clamp(1.3rem,4.5vw,2rem);
-    color:#000; background:var(--red); text-decoration:none;
+    color:#000; background:var(--red-bright); text-decoration:none;
     padding:.55em 1.1em; transition:.2s;
   }
-  a.tix:hover{ background:var(--red-bright); box-shadow:var(--glow); transform:translateY(-2px); }
-  .cta .note{
-    margin-top:1.1rem; font-family:"Space Mono",monospace;
-    font-size:.66rem; letter-spacing:.18em; color:var(--red-dim);
-  }
+  a.tix:hover{ box-shadow:var(--glow); transform:translateY(-2px); }
 
   footer{
     text-align:center; padding:3rem 0 4rem;
     font-family:"Space Mono",monospace; font-size:.6rem;
-    letter-spacing:.35em; color:var(--red-dim); position:relative; z-index:3;
+    letter-spacing:.35em; color:var(--rose); position:relative; z-index:3;
   }
-  footer a{ color:var(--red-dim); text-decoration:none; }
-  footer a:hover{ color:var(--red); }
+  footer a{ color:var(--rose); text-decoration:none; border-bottom:1px solid var(--red-dim); }
+  footer a:hover{ color:var(--red-bright); }
 
   .reveal{ opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s ease; }
   .reveal.in{ opacity:1; transform:none; }
