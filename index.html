@@ -13,7 +13,8 @@
 <meta name="theme-color" content="#000000" />
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="apple-touch-icon" href="assets/favicon.png" />
-<link rel="preload" as="image" type="image/webp" href="assets/face.webp" fetchpriority="high" />
+<link rel="preload" as="image" type="image/webp" href="assets/face.webp" imagesrcset="assets/face-400.webp 400w, assets/face.webp 700w" imagesizes="(max-width:600px) 55vw, (max-width:750px) 40vw, 300px" fetchpriority="high" />
+<link rel="preload" as="image" type="image/webp" href="assets/pupils.webp" fetchpriority="high" />
 
 <meta name="geo.region" content="IT-MI" />
 <meta name="geo.placename" content="Milano" />
@@ -227,6 +228,7 @@
   }
   .ev-card + .ev-card{ margin-top:1rem; }
   .ev-card:hover{ border-color:var(--red); background:rgba(212,0,0,.08); box-shadow:var(--glow); }
+  .ev-card picture{ display:contents; }
   .ev-card .thumb{
     width:88px; height:88px; object-fit:cover;
     border:1px solid var(--red-dim);
@@ -304,10 +306,10 @@
 
   <header class="hero">
     <div class="mascot" id="mascot">
-      <picture><source srcset="assets/face.webp" type="image/webp" /><img class="g1" src="assets/face.png" alt="" aria-hidden="true" /></picture>
-      <picture><source srcset="assets/face.webp" type="image/webp" /><img class="g2" src="assets/face.png" alt="" aria-hidden="true" /></picture>
-      <picture><source srcset="assets/face.webp" type="image/webp" /><img class="base" src="assets/face.png" alt="DYS mascot" fetchpriority="high" /></picture>
-      <picture><source srcset="assets/pupils.webp" type="image/webp" /><img class="pupils" id="pupils" src="assets/pupils.png" alt="" aria-hidden="true" /></picture>
+      <picture><source type="image/webp" srcset="assets/face-400.webp 400w, assets/face.webp 700w" sizes="(max-width:600px) 55vw, (max-width:750px) 40vw, 300px" /><img class="g1" src="assets/face.png" alt="" aria-hidden="true" /></picture>
+      <picture><source type="image/webp" srcset="assets/face-400.webp 400w, assets/face.webp 700w" sizes="(max-width:600px) 55vw, (max-width:750px) 40vw, 300px" /><img class="g2" src="assets/face.png" alt="" aria-hidden="true" /></picture>
+      <picture><source type="image/webp" srcset="assets/face-400.webp 400w, assets/face.webp 700w" sizes="(max-width:600px) 55vw, (max-width:750px) 40vw, 300px" /><img class="base" src="assets/face.png" alt="DYS mascot" fetchpriority="high" /></picture>
+      <picture><source srcset="assets/pupils.webp" type="image/webp" /><img class="pupils" id="pupils" src="assets/pupils.png" alt="" aria-hidden="true" fetchpriority="high" /></picture>
     </div>
     <a class="scroll-cue" href="#bio">SCROLL &darr;</a>
   </header>
@@ -316,7 +318,7 @@
     <section id="events" class="reveal">
       <div class="label">EVENTS</div>
       <a class="ev-card" href="xxx_mfw.html">
-        <img class="thumb" src="assets/event-xxx-thumb.jpg" alt="XXX — Milan Fashion Week Edition" loading="lazy" />
+        <picture><source srcset="assets/event-xxx-thumb.webp" type="image/webp" /><img class="thumb" src="assets/event-xxx-thumb.jpg" alt="XXX — Milan Fashion Week Edition" loading="lazy" width="88" height="88" /></picture>
         <div class="meta">
           <div class="date">Fri 19 Jun 2026 &middot; 23:30</div>
           <div class="title">XXX &mdash; Milan Fashion Week Edition</div>
