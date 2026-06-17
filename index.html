@@ -6,7 +6,7 @@
 
 <!-- CSP: script-src is strict (all JS is external). frame-ancestors / HSTS / COOP
      are delivered as HTTP headers at the Cloudflare edge — see CLAUDE.md. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self'; font-src https://fonts.gstatic.com; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action https://*.list-manage.com; require-trusted-types-for 'script'; upgrade-insecure-requests" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self'; font-src https://fonts.gstatic.com; connect-src 'self'; frame-src https://*.list-manage.com; object-src 'none'; base-uri 'none'; form-action https://*.list-manage.com; require-trusted-types-for 'script'; upgrade-insecure-requests" />
 <title>Destroy Your Spirit — Underground Electronic Music &amp; Raves in Milan</title>
 <meta name="description" content="Destroy Your Spirit (DYS) is an underground electronic music and rave collective in Milan — techno, electro and breaks from Mourir Beau, Scarface and figo. Events, lineups and tickets." />
 <link rel="canonical" href="https://destroyyourspir.it/" />
@@ -273,7 +273,7 @@
     color:var(--rose); margin-bottom:1.8rem;
   }
   .signup{ display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; max-width:520px; margin:0 auto; }
-  .signup .hp{ position:absolute; left:-5000px; }
+  .hp{ position:absolute; left:-5000px; width:1px; height:1px; overflow:hidden; border:0; }
   .signup-email{
     flex:1 1 240px; min-width:0;
     font-family:"Space Mono",monospace; font-size:clamp(.9rem,2.2vw,1.05rem);
@@ -290,6 +290,11 @@
     padding:.75em 1.4em; cursor:pointer; transition:.2s;
   }
   .signup-btn:hover{ box-shadow:var(--glow); transform:translateY(-1px); }
+  .signup-done{
+    font-family:"Space Mono",monospace; font-size:clamp(.95rem,2.4vw,1.1rem);
+    letter-spacing:.08em; color:var(--red-bright); text-shadow:var(--glow);
+  }
+  [hidden]{ display:none !important; }
 
   .socials{ display:flex; flex-direction:column; gap:.9rem; margin-top:2.6rem; }
   .socials a{
@@ -387,11 +392,13 @@
       <div class="glyph" aria-hidden="true">&times;&times;&times;</div>
       <h2>Join The Cult</h2>
       <p class="signup-note">Dates, drops and the next XXX. Nothing else.</p>
-      <form class="signup" action="https://destroyyourspir.us15.list-manage.com/subscribe/post?u=65652dbb69ed67e9a4df978e5&amp;id=99828cfbf7&amp;f_id=007ea6e1f0" method="post" target="_blank">
+      <form class="signup" action="https://destroyyourspir.us15.list-manage.com/subscribe/post?u=65652dbb69ed67e9a4df978e5&amp;id=99828cfbf7&amp;f_id=007ea6e1f0" method="post" target="mc-target">
         <input class="signup-email" type="email" name="EMAIL" placeholder="your@email" required aria-label="Email address" autocomplete="email" />
         <div class="hp" aria-hidden="true"><input type="text" name="b_65652dbb69ed67e9a4df978e5_99828cfbf7" tabindex="-1" value="" autocomplete="off" /></div>
         <button class="signup-btn" type="submit" name="subscribe">Sign Up</button>
       </form>
+      <p class="signup-done" role="status" hidden>You're in. Check your inbox to confirm.</p>
+      <iframe name="mc-target" class="hp" title="newsletter" aria-hidden="true" tabindex="-1"></iframe>
       <div class="socials">
         <a href="https://instagram.com/Destroyyourspirit" target="_blank" rel="noopener">INSTAGRAM &rarr; @DESTROYYOURSPIRIT</a>
         <a href="mailto:contact@destroyyourspir.it">contact@destroyyourspir.it</a>

@@ -8,6 +8,21 @@
   if (f) { f.media = 'all'; }
 })();
 
+// Newsletter: the form posts natively into a hidden iframe (target="mc-target"),
+// so the page never navigates away. We just swap in a confirmation message.
+(function () {
+  var form = document.querySelector('form.signup');
+  if (!form) return;
+  var done = document.querySelector('.signup-done');
+  form.addEventListener('submit', function () {
+    // let the native POST reach the hidden iframe, then swap the UI
+    setTimeout(function () {
+      form.hidden = true;
+      if (done) done.hidden = false;
+    }, 0);
+  });
+})();
+
 (function () {
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
