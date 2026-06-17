@@ -15,6 +15,9 @@
   if (!form) return;
   var done = document.querySelector('.signup-done');
   form.addEventListener('submit', function () {
+    // belt-and-suspenders: only confirm if the email field is actually valid
+    // (native validation already blocks invalid submits; this guards programmatic ones)
+    if (!form.checkValidity()) return;
     // let the native POST reach the hidden iframe, then swap the UI
     setTimeout(function () {
       form.hidden = true;
